@@ -1,17 +1,9 @@
-import requests
+from spider import request_fun
 import bs4
+
 from bs4 import BeautifulSoup
 
 
-def get_html(url):
-    try:
-        r = requests.get(url, timeout=30)
-        # r.raise_for_status
-        # 我手动测试了编码。并设置好，这样有助于效率的提升
-        r.encoding = ('utr-8')
-        return r.text
-    except:
-        return "读取网页内容出错————Something Wrong！"
 
 def get_content(url):
     '''
@@ -20,7 +12,7 @@ def get_content(url):
     :return:
     '''
     url_list = []
-    html = get_html(url)
+    html = request_fun.get_html(url)
     soup = bs4.BeautifulSoup(html, 'lxml')
     category_list = soup.find_all('div', attrs={'class': 'index_toplist mright mbottom'})
     history_finished_list = soup.find_all('div', attrs={'class': 'index_toplist mbottom'})
@@ -65,7 +57,7 @@ def get_txt_url(url):
 
     '''
     url_list = []
-    html = get_html(url)
+    html = request_fun.get_html(url)
     soup = bs4.BeautifulSoup(html, 'lxml')
     lista = soup.find_all('dd')
     txt_name = soup.find('h1').text
@@ -81,7 +73,7 @@ def get_one_txt(url, txt_name):
     获取小说每个章节的文本
     并写入到本地
     '''
-    html = get_html(url) #.replace('<br>', '\n')
+    html = request_fun.get_html(url) #.replace('<br>', '\n')
 
     soup = bs4.BeautifulSoup(html, 'lxml')
     try:
